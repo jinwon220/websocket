@@ -28,6 +28,7 @@
 		var data = evt.data.trim();
 
 		if (data.split(":")[0] == "room"+$('#hiddenroomnumber').val()) {
+			console.log(data.substr(data.split(":")[0].length+1));
 			appendMessage(data.substr(data.split(":")[0].length+1));
 		}else {
 			$('#userListArea').empty();
@@ -54,14 +55,15 @@
 	}
 	
 	function appendMessage(msg) {
-		$("#roomChatMessageArea").append(msg+"<br>");
+		console.log(msg.split(":")[0]);
+		if(msg.split(":")[0] == $('#hiddenuserid').val()){
+			$("#roomChatMessageArea").append('<div style="text-align: right;">'+msg+'</div>');
+		}else{
+			$("#roomChatMessageArea").append('<div style="text-align: left;">'+msg+'</div>');
+		}
 		var chatAreaHeight = $("#chatArea").height();
 		var maxScroll = $("#roomChatMessageArea").height() - chatAreaHeight;
 		$("#chatArea").scrollTop(maxScroll);
-	}
-	
-	function appendwriteMessage(msg) {
-		$("#roomChatMessageArea").append(msg+"<br>");
 	}
 	
 	$(function(){
@@ -94,6 +96,7 @@
 	<div id="userArea" style="margin-top: 20px; text-align: center;">
 		<div id="userListArea"></div>
 	</div>
+	
 	<hr>
 	<div style="margin-top: 20px; text-align: center;">
 		<h1>대화 영역</h1>
