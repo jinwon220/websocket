@@ -7,6 +7,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 $(function(){
 	showrom();
@@ -41,12 +43,12 @@ function showrom(){
 		contentType: "application/json; charset=utf-8",
 		success : function(data){
 			$('#roomarea').empty();
-			var htmltext = '';
+			var htmltext = '<hr>';
 			$.each(data.data, function(index, elt) {
 				htmltext += '<form action="room'+elt.roomnumber+'.htm" method="post">'
 						  + '<input type="hidden" name="roomnumber" value="'+elt.roomnumber+'" >'
 						  + '<label type="text" name="roomnumber">'+elt.roomname+'</label> '
-						  +	'<input type="submit" value="입장"> </form><br>'
+						  +	'<input class="btn btn-default" type="submit" value="입장"> </form><br>'
 			});
 			htmltext += '<hr>';
 			
@@ -57,11 +59,13 @@ function showrom(){
 </script>
 </head>
 <body>
-<input type="text" id="roomname" >
-<input type="button" value="방만들기" id="roombtn">
-<hr>
-<div id="roomarea">
-	
-</div>
+	<div class="input-group col-sm-offset-4 col-sm-4"
+		style="margin-top: 20px; margin-bottom: 1px;">
+		<input class="form-control" type="text" id="roomname" name="userid"
+			placeholder="방이름"> <span class="input-group-addon"><input
+			type="button" class="btn btn-default" value="방만들기" id="roombtn"></span>
+	</div>
+
+	<div class="container" id="roomarea"></div>
 </body>
 </html>

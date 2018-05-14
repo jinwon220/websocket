@@ -49,6 +49,7 @@ public class ChatController {
 	@RequestMapping(value="/room*.htm", method=RequestMethod.POST)
 	public String room(String roomnumber, Model model, Principal principal) {
 		Room room = service.select(Integer.parseInt(roomnumber));
+		
 		model.addAttribute("room", room);
 		model.addAttribute("userid", principal.getName());
 		return "chat.room";
