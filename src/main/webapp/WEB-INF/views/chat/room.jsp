@@ -13,7 +13,7 @@
 	var wsocket;
 	
 	function connect() {
-		wsocket = new WebSocket("ws://192.168.0.28:8090/kr/room"+$('#hiddenroomnumber').val());
+		wsocket = new WebSocket("ws://172.30.1.27:8090/kr/room"+$('#hiddenroomnumber').val());
 		wsocket.onopen = onOpen;
 		wsocket.onmessage = onMessage;
 		wsocket.onclose = onClose;
@@ -25,27 +25,29 @@
 		appendMessage("연결되었습니다.");
 	}
 	function onMessage(evt) {
+		var presentName = $("#hiddenuserid").val()
 		var data = evt.data.trim();
-
-		if (data.split(":")[0] == "room"+$('#hiddenroomnumber').val()) {
-			var txMessage = data.substr(data.split(":")[0].length+1);
-			var txName = txMessage.split(":")[0];
-			var begin = txMessage.indexOf("[");
-			var end = txMessage.indexOf("]");
-			var rxName = txMessage.substring(begin + 1, end);
-			var rxMessage = txMessage.substr(end + 1);
-			var nickname = $("#hiddenuserid").val();
-			
-			if(txName == rxName) {
-				appendMessage("내 자신에게 하는 말: " + rxMessage);
-				return;
+		var jsonData = null;
+		console.log("현재 대화명: " + presentName);
+		console.log("evt.data: " + evt.data);
+		
+		if(data.indexOf("nickname") > 0) {
+			jsonData = JSON.parse(data);
+		};
+		
+		if(jsonData != null) {
+			if($('#hiddenroomnumber').val() == jsonData.roomnum) {
+				if(jsonData.whisper == "whisper") { //전체대화
+					appendMessage(jsonData.nickname + ":" + jsonData.msg);
+					return;
+				}else {
+					if(presentName == jsonData.nickname) { //귓속말 송신
+						appendMessage(jsonData.nickname + ":" + "[" + jsonData.whisper + "]" + jsonData.msg);
+					}else if(presentName == jsonData.whisper) { //귓속말 수신
+						appendMessage("[" + jsonData.nickname + "] 님에게 온 귓속말:" + jsonData.msg);
+					}
+				}
 			}
-			if(nickname == rxName) {
-				appendMessage("[" + txName + "] 님에게 온 귓속말: " + rxMessage);
-				return;
-			}
-			
-			appendMessage(data.substr(data.split(":")[0].length+1));
 		}else {
 			$('#userListArea').empty();
 			$('#whisperUsers').empty();
@@ -68,19 +70,18 @@
 	}
 	
 	function send() {
-		var nickname = $("#hiddenuserid").val();
-		var msg = $("#roomMessage").val();
+		var json = {
+			roomnum: $('#hiddenroomnumber').val(),
+			nickname: $("#hiddenuserid").val(),
+			whisper: $('#whisperUsers').val(),
+			msg: $("#roomMessage").val()
+		};
 		
-		if($('#whisperUsers').val() != "whisper") {
-			wsocket.send("room"+$('#hiddenroomnumber').val()+":"+nickname+":"+"["+$('#whisperUsers').val()+"]" + msg);
-		}else {
-			wsocket.send("room"+$('#hiddenroomnumber').val()+":"+nickname+":" + msg);
-		}
-		
+		wsocket.send(JSON.stringify(json));
 		$("#roomMessage").val("");
 	}
 	
-	function del(){
+	function del() {
 		$("#roomChatMessageArea").empty();
 	}
 	

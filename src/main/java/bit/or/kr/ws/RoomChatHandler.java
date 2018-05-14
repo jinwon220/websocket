@@ -45,6 +45,8 @@ public class RoomChatHandler extends TextWebSocketHandler {
 		
 		//귓속말
 		String txText = message.getPayload();
+		
+		/*
 		int begin = txText.indexOf("[");
 		int end = txText.lastIndexOf("]");
 				
@@ -61,6 +63,7 @@ public class RoomChatHandler extends TextWebSocketHandler {
 			}
 			return;
 		}
+		*/
 		
 		for (WebSocketSession s : users.values()) {
 			if(s.getUri().equals(session.getUri())) {
