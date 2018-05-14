@@ -7,6 +7,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 	var wsocket;
 	
@@ -24,8 +26,20 @@
 	}
 	function onMessage(evt) {
 		var data = evt.data.trim();
+
 		if (data.split(":")[0] == "room"+$('#hiddenroomnumber').val()) {
 			appendMessage(data.substr(data.split(":")[0].length+1));
+		}else {
+			$('#userListArea').empty();
+			$.each(data.split(","), function(i, elt) {
+				if(elt.indexOf("/") == -1){
+					$('#userListArea').append(elt+"<br>");
+				}
+			})
+			
+			if(data.indexOf("/") != -1){
+				appendMessage(data.split("/")[1]);
+			}
 		}
 	}
 	function onClose(evt) {
@@ -44,6 +58,10 @@
 		var chatAreaHeight = $("#chatArea").height();
 		var maxScroll = $("#roomChatMessageArea").height() - chatAreaHeight;
 		$("#chatArea").scrollTop(maxScroll);
+	}
+	
+	function appendwriteMessage(msg) {
+		$("#roomChatMessageArea").append(msg+"<br>");
 	}
 	
 	$(function(){
@@ -66,14 +84,33 @@
 </style>
 </head>
 <body>
-	방이름: ${room.roomname}
+	<div style="margin-top: 20px; text-align: center;">
+		방이름: ${room.roomname}
+		<hr>
+		<input type="hidden" value="${room.roomnumber}" id="hiddenroomnumber" >
+		<input type="hidden" value="${userid}" id="hiddenuserid" >
+		<h1>유저 목록</h1>
+	</div>
+	<div id="userArea" style="margin-top: 20px; text-align: center;">
+		<div id="userListArea"></div>
+	</div>
 	<hr>
-	<input type="hidden" value="${room.roomnumber}" id="hiddenroomnumber" >
-	<input type="hidden" value="${userid}" id="hiddenuserid" >
-    <h1>대화 영역</h1>
-    <div id="chatArea"><div id="roomChatMessageArea"></div></div>
-    <br/>
-    <input type="text" id="roomMessage">
-    <input type="button" id="roomSendBtn" value="전송">
+	<div style="margin-top: 20px; text-align: center;">
+		<h1>대화 영역</h1>
+	</div>
+	<div style="margin-left: 10%; width: 80%; height: 500px;" id="chatArea">
+		<div style="width: 100%; height: 100%;" id="roomChatMessageArea"></div>
+	</div>
+	<br />
+	<div class="container">
+		<div class="col-sm-10">
+			<input class="form-control col-sm-11" type="text" id="roomMessage"
+				placeholder="글을 입력해주세요">
+		</div>
+		<div class="col-sm-2">
+			<input class="form-control col-sm-1" type="button" id="roomSendBtn"
+				value="전송">
+		</div>
+	</div>
 </body>
 </html>
