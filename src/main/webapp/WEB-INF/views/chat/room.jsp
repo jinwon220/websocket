@@ -50,20 +50,24 @@
 	function send() {
 		var nickname = $("#hiddenuserid").val();
 		var msg = $("#roomMessage").val();
-		wsocket.send("room"+$('#hiddenroomnumber').val()+":"+nickname+":" + msg);
+		wsocket.send("room"+$('#hiddenroomnumber').val()+":"+nickname+" : " + msg);
 		$("#roomMessage").val("");
 	}
 	
 	function appendMessage(msg) {
-		console.log(msg.split(":")[0]);
-		if(msg.split(":")[0] == $('#hiddenuserid').val()){
-			$("#roomChatMessageArea").append('<div style="text-align: right;">'+msg+'</div>');
-		}else{
-			$("#roomChatMessageArea").append('<div style="text-align: left;">'+msg+'</div>');
+		console.log("1111111"+msg);
+		if(msg.split(":")[0] == $('#hiddenuserid').val()+" "){
+			$("#roomChatMessageArea").append('<div style="text-align: right;"><label class="bubble">'+msg+'</label></div>');
+		}else if(msg.indexOf(":") != -1){
+			$("#roomChatMessageArea").append('<div style="text-align: left;"><label class="bubble">'+msg+'</label></div>');
+		}else {
+			$("#roomChatMessageArea").append('<div style="text-align: center;">'+msg+'</div>');
 		}
+		
 		var chatAreaHeight = $("#chatArea").height();
-		var maxScroll = $("#roomChatMessageArea").height() - chatAreaHeight;
-		$("#chatArea").scrollTop(maxScroll);
+		var maxScroll = $("#roomChatMessageArea").height() + chatAreaHeight;
+		var scroll = 10000000000000000;
+		$("#chatArea").scrollTop(scroll);
 	}
 	
 	$(function(){
@@ -83,6 +87,20 @@
 #chatArea {
 	width: 200px; height: 100px; overflow-y: auto; border: 1px solid black;
 }
+
+.bubble {
+	position: relative;
+	width: auto;
+	height: auto;
+	max-width: 300px;
+	padding: 5px;
+	background: #FFFFFF;
+	-webkit-border-radius: 16px;
+	-moz-border-radius: 16px;
+	border-radius: 16px;
+	border: #00B0FF solid 2px;
+}
+
 </style>
 </head>
 <body>
