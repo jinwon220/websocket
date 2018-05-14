@@ -1,6 +1,5 @@
 package bit.or.kr.ws;
 
-import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -30,11 +29,40 @@ private Map<String, WebSocketSession> users = new ConcurrentHashMap<>();
 	@Override
 	protected void handleTextMessage(
 			WebSocketSession session, TextMessage message) throws Exception {
+		//room2:good:df 방이름:아이디:내용
+		System.out.println("메시지: " + message.getPayload());
+		
+		//귓속말 1
+		/*
+		System.out.println("메시지 가공: " + message.getPayload().contains("/r"));
+		boolean isWhisper = txText.contains("/r");
+		if(isWhisper) {
+			System.out.println("인덱스: " + txText.indexOf("/r"));
+		}
+		*/
+		
+		//귓속말 2
+		String txText = message.getPayload();
+		boolean isWhisper = txText.contains("*");
+		if(isWhisper) {
+			int begin = txText.indexOf("*");
+			int end = txText.lastIndexOf("*");
+			String whisperID = txText.substring(begin + 1, end);
+			System.out.println("귓속말 아이디: " + whisperID);
+			
+			for (WebSocketSession s : users.values()) {
+				if(s.getPrincipal().getName().equals(whisperID)) {
+					session.sendMessage(message);
+					s.sendMessage(message);
+				}
+			}
+			return;
+		}
+		
 		for (WebSocketSession s : users.values()) {
 			s.sendMessage(message);
 			System.out.println("아이디: " + s.getPrincipal().getName());
 		}
-		//귓속말
 	}
 
 	@Override

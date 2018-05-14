@@ -11,7 +11,7 @@
 	var wsocket;
 	
 	function connect() {
-		wsocket = new WebSocket("ws://localhost:8090/kr/room"+$('#hiddenroomnumber').val());
+		wsocket = new WebSocket("ws://192.168.0.41:8090/kr/room"+$('#hiddenroomnumber').val());
 		wsocket.onopen = onOpen;
 		wsocket.onmessage = onMessage;
 		wsocket.onclose = onClose;
@@ -24,8 +24,18 @@
 	}
 	function onMessage(evt) {
 		var data = evt.data.trim();
+		console.log("데이터: " + data);
+		
 		if (data.split(":")[0] == "room"+$('#hiddenroomnumber').val()) {
-			appendMessage(data.substr(data.split(":")[0].length+1));
+			var contents = data.substr(data.split(":")[0].length+1);
+			var begin = contents.indexOf("*");
+			var end = contents.lastIndexOf("*");
+			if(begin > 0 && end > 0) {
+				var whisperID = contents.substr(begin + 1, end);
+				console.log("귓속말 아이디: " + whisperID);
+			}
+			
+			appendMessage(contents);
 		}
 	}
 	function onClose(evt) {
@@ -75,5 +85,6 @@
     <br/>
     <input type="text" id="roomMessage">
     <input type="button" id="roomSendBtn" value="전송">
+    
 </body>
 </html>
