@@ -3,7 +3,7 @@
 <mapper namespace="bit.or.kr.dao.RoomDao">
 	
 	<select id="selects" resultType="bit.or.kr.dto.Room">
-		select * from room
+		select * from room order by roomnumber asc
 	</select>
 	
 	<select id="select" resultType="bit.or.kr.dto.Room">

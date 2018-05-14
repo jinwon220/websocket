@@ -28,13 +28,33 @@
 		var data = evt.data.trim();
 
 		if (data.split(":")[0] == "room"+$('#hiddenroomnumber').val()) {
-			console.log(data.substr(data.split(":")[0].length+1));
+			var txMessage = data.substr(data.split(":")[0].length+1);
+			var txName = txMessage.split(":")[0];
+			var begin = txMessage.indexOf("[");
+			var end = txMessage.indexOf("]");
+			var rxName = txMessage.substring(begin + 1, end);
+			var rxMessage = txMessage.substr(end + 1);
+			var nickname = $("#hiddenuserid").val();
+			
+			if(txName == rxName) {
+				appendMessage("내 자신에게 하는 말: " + rxMessage);
+				return;
+			}
+			if(nickname == rxName) {
+				appendMessage("[" + txName + "] 님에게 온 귓속말: " + rxMessage);
+				return;
+			}
+			
 			appendMessage(data.substr(data.split(":")[0].length+1));
 		}else {
 			$('#userListArea').empty();
+			$('#whisperUsers').empty();
+			$('#whisperUsers').append("<option value='whisper'>전체 채팅</option>");
+			
 			$.each(data.split(","), function(i, elt) {
 				if(elt.indexOf("/") == -1){
 					$('#userListArea').append("<h3>"+elt+"</h3>");
+					$('#whisperUsers').append("<option value=" + elt + ">" + elt + "</option>");
 				}
 			})
 			
@@ -50,7 +70,13 @@
 	function send() {
 		var nickname = $("#hiddenuserid").val();
 		var msg = $("#roomMessage").val();
-		wsocket.send("room"+$('#hiddenroomnumber').val()+":"+nickname+" : " + msg);
+		
+		if($('#whisperUsers').val() != "whisper") {
+			wsocket.send("room"+$('#hiddenroomnumber').val()+":"+nickname+":"+"["+$('#whisperUsers').val()+"]" + msg);
+		}else {
+			wsocket.send("room"+$('#hiddenroomnumber').val()+":"+nickname+":" + msg);
+		}
+		
 		$("#roomMessage").val("");
 	}
 	
@@ -59,8 +85,7 @@
 	}
 	
 	function appendMessage(msg) {
-		console.log("1111111"+msg);
-		if(msg.split(":")[0] == $('#hiddenuserid').val()+" "){
+		if(msg.split(":")[0] == $('#hiddenuserid').val()){
 			$("#roomChatMessageArea").append('<div style="text-align: right; margin:20px;"><label class="bubble" style="margin-bottom: -10px;">'+msg.split(":")[1]+'</label></div>');
 		}else if(msg.indexOf(":") != -1){
 			$("#roomChatMessageArea").append('<div style="text-align: left; margin:20px;">'+msg.split(":")[0]+'<br><label class="bubble" style="margin-bottom: -10px;">'+msg.split(":")[1]+'</label></div>');
@@ -84,6 +109,10 @@
 			event.stopPropagation();
 		});
 		$('#roomSendBtn').click(function() { if($('#roomMessage').val() != "") send(); });
+
+		$('#outbtn').click(function() {
+			location.href="/kr/waitting.htm";
+		});
 
 	});
 </script>
@@ -129,7 +158,12 @@
 	</div>
 	<br />
 	<div class="container">
-		<div class="col-sm-8">
+		<div class="col-sm-2">
+			<select id="whisperUsers">
+			  <option value="whisper">전체 채팅</option>
+			</select>
+		</div>
+		<div class="col-sm-4">
 			<input class="form-control col-sm-11" type="text" id="roomMessage"
 				placeholder="글을 입력해주세요">
 		</div>
@@ -140,6 +174,9 @@
 		<div class="col-sm-2">
 			<input class="form-control col-sm-1" type="button" onclick="del()"
 				value="지우개">
+		</div>
+		<div class="col-sm-2">
+			<input class="form-control col-sm-1" type="button" value="나가기" id="outbtn">
 		</div>
 	</div>
 </body>

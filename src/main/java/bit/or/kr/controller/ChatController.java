@@ -1,5 +1,7 @@
 package bit.or.kr.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.security.Principal;
 import java.util.List;
 
@@ -31,6 +33,11 @@ public class ChatController {
 	
 	@RequestMapping(value="/waitting.htm", method=RequestMethod.POST)
 	public @ResponseBody String insertroom(@RequestBody String roomname) {
+		try {
+			roomname = URLDecoder.decode(roomname, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		int result = service.insert(roomname.substring(9));
 		String check = "";
 		if (result > 0) check = "1";

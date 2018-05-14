@@ -61,9 +61,12 @@ function showrom(){
 <body>
 	<div class="input-group col-sm-offset-4 col-sm-4"
 		style="margin-top: 20px; margin-bottom: 1px;">
-		<input class="form-control" type="text" id="roomname" name="userid"
-			placeholder="방이름"> <span class="input-group-addon"><input
-			type="button" class="btn btn-default" value="방만들기" id="roombtn"></span>
+		<div class="col-sm-8">
+			<input class="form-control" type="text" id="roomname" name="userid"	placeholder="방이름">
+		</div> 
+		<div class="col-sm-2">
+			<input type="button" class="btn btn-default" value="방만들기" id="roombtn">
+		</div>
 	</div>
 
 	<div class="container" id="roomarea"></div>

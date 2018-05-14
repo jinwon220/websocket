@@ -42,6 +42,26 @@ public class RoomChatHandler extends TextWebSocketHandler {
 	@Override
 	protected void handleTextMessage(
 			WebSocketSession session, TextMessage message) throws Exception {
+		
+		//귓속말
+		String txText = message.getPayload();
+		int begin = txText.indexOf("[");
+		int end = txText.lastIndexOf("]");
+				
+		if(begin > 0 && end > 0) {
+			String whisperID = txText.substring(begin + 1, end);
+			
+			for (WebSocketSession s : users.values()) {
+				if(s.getPrincipal().getName().equals(whisperID)) {
+					if(session != s) {
+						session.sendMessage(message);
+					}
+					s.sendMessage(message);
+				}
+			}
+			return;
+		}
+		
 		for (WebSocketSession s : users.values()) {
 			if(s.getUri().equals(session.getUri())) {
 				s.sendMessage(message);
