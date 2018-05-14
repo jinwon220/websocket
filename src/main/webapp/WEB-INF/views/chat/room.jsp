@@ -34,7 +34,7 @@
 			$('#userListArea').empty();
 			$.each(data.split(","), function(i, elt) {
 				if(elt.indexOf("/") == -1){
-					$('#userListArea').append(elt+"<br>");
+					$('#userListArea').append("<h3>"+elt+"</h3>");
 				}
 			})
 			
@@ -54,18 +54,21 @@
 		$("#roomMessage").val("");
 	}
 	
+	function del(){
+		$("#roomChatMessageArea").empty();
+	}
+	
 	function appendMessage(msg) {
 		console.log("1111111"+msg);
 		if(msg.split(":")[0] == $('#hiddenuserid').val()+" "){
-			$("#roomChatMessageArea").append('<div style="text-align: right;"><label class="bubble">'+msg+'</label></div>');
+			$("#roomChatMessageArea").append('<div style="text-align: right; margin:20px;"><label class="bubble">'+msg.split(":")[1]+'</label></div>');
 		}else if(msg.indexOf(":") != -1){
-			$("#roomChatMessageArea").append('<div style="text-align: left;"><label class="bubble">'+msg+'</label></div>');
+			$("#roomChatMessageArea").append('<div style="text-align: left; margin:20px;">'+msg.split(":")[0]+'<br><label class="bubble">'+msg.split(":")[1]+'</label></div>');
 		}else {
 			$("#roomChatMessageArea").append('<div style="text-align: center;">'+msg+'</div>');
 		}
 		
 		var chatAreaHeight = $("#chatArea").height();
-		var maxScroll = $("#roomChatMessageArea").height() + chatAreaHeight;
 		var scroll = 10000000000000000;
 		$("#chatArea").scrollTop(scroll);
 	}
@@ -73,14 +76,19 @@
 	$(function(){
 		connect();
 		
+		
 		$('#roomMessage').keypress(function(event){
 			var keycode = (event.keyCode ? event.keyCode : event.which);
 			if(keycode == '13'){
-				send();	
+				if($('#roomMessage').val() != "") send();	
 			}
 			event.stopPropagation();
 		});
-		$('#roomSendBtn').click(function() { send(); });
+		$('#roomSendBtn').click(function() { if($('#roomMessage').val() != "") send(); });
+		
+		$('#chatArea').click(function() {
+			
+		});
 	});
 </script>
 <style>
@@ -94,6 +102,7 @@
 	height: auto;
 	max-width: 300px;
 	padding: 5px;
+	word-wrap: break-word;
 	background: #FFFFFF;
 	-webkit-border-radius: 16px;
 	-moz-border-radius: 16px;
@@ -124,13 +133,17 @@
 	</div>
 	<br />
 	<div class="container">
-		<div class="col-sm-10">
+		<div class="col-sm-8">
 			<input class="form-control col-sm-11" type="text" id="roomMessage"
 				placeholder="글을 입력해주세요">
 		</div>
 		<div class="col-sm-2">
 			<input class="form-control col-sm-1" type="button" id="roomSendBtn"
 				value="전송">
+		</div>
+		<div class="col-sm-2">
+			<input class="form-control col-sm-1" type="button" onclick="del()"
+				value="지우개">
 		</div>
 	</div>
 </body>
