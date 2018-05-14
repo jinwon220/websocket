@@ -13,7 +13,7 @@
 	
 	var wsocket;
 	function sendMessage() {
-		wsocket = new WebSocket("ws://192.168.0.28:8090/kr/echo-ws");
+		wsocket = new WebSocket("ws://localhost:8090/kr/echo-ws");
 		/*
 		      이 엔드포인트 경로는 스프링 설정의 경로
 		    <websocket:mapping handler="echoHandler" path="/echo-ws" />

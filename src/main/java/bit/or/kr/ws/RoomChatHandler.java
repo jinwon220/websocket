@@ -17,6 +17,8 @@ private Map<String, WebSocketSession> users = new ConcurrentHashMap<>();
 	public void afterConnectionEstablished(
 			WebSocketSession session) throws Exception {
 		users.put(session.getId(), session);
+		System.out.println("접속된 아이디 숫자: " + session.getId());
+		System.out.println("접속된 아이디: " + session.getPrincipal().getName());
 	}
 
 	@Override
@@ -30,7 +32,9 @@ private Map<String, WebSocketSession> users = new ConcurrentHashMap<>();
 			WebSocketSession session, TextMessage message) throws Exception {
 		for (WebSocketSession s : users.values()) {
 			s.sendMessage(message);
+			System.out.println("아이디: " + s.getPrincipal().getName());
 		}
+		//귓속말
 	}
 
 	@Override

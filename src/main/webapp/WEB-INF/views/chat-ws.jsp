@@ -10,7 +10,7 @@
 	
 	function connect() {
 		/* <websocket:mapping handler="echoHandler" path="/chat-ws" /> 맵핑 */
-		wsocket = new WebSocket("ws://192.168.0.28:8090/kr/chat-ws");
+		wsocket = new WebSocket("ws://localhost:8090/kr/chat-ws");
 		wsocket.onopen = onOpen;
 		wsocket.onmessage = onMessage;
 		wsocket.onclose = onClose;

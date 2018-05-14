@@ -11,7 +11,7 @@
 	var wsocket;
 	
 	function connect() {
-		wsocket = new WebSocket("ws://192.168.0.28:8090/kr/room"+$('#hiddenroomnumber').val());
+		wsocket = new WebSocket("ws://localhost:8090/kr/room"+$('#hiddenroomnumber').val());
 		wsocket.onopen = onOpen;
 		wsocket.onmessage = onMessage;
 		wsocket.onclose = onClose;
