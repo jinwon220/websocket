@@ -13,7 +13,7 @@
 	var wsocket;
 	
 	function connect() {
-		wsocket = new WebSocket("ws://172.30.1.27:8090/kr/room"+$('#hiddenroomnumber').val());
+		wsocket = new WebSocket("ws://192.168.0.28:8090/kr/room"+$('#hiddenroomnumber').val());
 		wsocket.onopen = onOpen;
 		wsocket.onmessage = onMessage;
 		wsocket.onclose = onClose;
@@ -55,7 +55,11 @@
 			
 			$.each(data.split(","), function(i, elt) {
 				if(elt.indexOf("/") == -1){
-					$('#userListArea').append("<h3>"+elt+"</h3>");
+					if(elt == $('#hiddenuserid').val()){
+						$('#userListArea').append("<h3> 본인 : "+elt+"</h3>");
+					}else{
+						$('#userListArea').append("<h3>"+elt+"</h3>");
+					}
 					$('#whisperUsers').append("<option value=" + elt + ">" + elt + "</option>");
 				}
 			})
@@ -71,16 +75,6 @@
 	
 	function send() {
 		var json = {
-<<<<<<< HEAD
-				roomnum: $('#hiddenroomnumber').val(),
-				nickname: $("#hiddenuserid").val(),
-				whisper: $('#whisperUsers').val(),
-				msg: $("#roomMessage").val()
-			};
-			
-			wsocket.send(JSON.stringify(json));
-			$("#roomMessage").val("");
-=======
 			roomnum: $('#hiddenroomnumber').val(),
 			nickname: $("#hiddenuserid").val(),
 			whisper: $('#whisperUsers').val(),
@@ -89,7 +83,6 @@
 		
 		wsocket.send(JSON.stringify(json));
 		$("#roomMessage").val("");
->>>>>>> 8df547e677bb0fb6c7e3e1b0e1bf79c193ca6433
 	}
 	
 	function del() {
