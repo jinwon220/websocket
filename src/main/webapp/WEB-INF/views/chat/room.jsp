@@ -113,7 +113,6 @@
 			wsocket.close();
 			window.close();
 		});
-
 	});
 </script>
 <style>
