@@ -93,8 +93,7 @@
 			$("#roomChatMessageArea").append('<div style="text-align: center;">'+msg+'</div>');
 		}
 		
-		var scroll = 10000000000000000;
-		$("#chatArea").scrollTop(scroll);
+		document.getElementById("chatArea").scrollTop = document.getElementById("chatArea").scrollHeight;
 	}
 	
 	$(function(){
