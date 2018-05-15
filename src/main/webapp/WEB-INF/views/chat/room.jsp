@@ -28,8 +28,6 @@
 		var presentName = $("#hiddenuserid").val()
 		var data = evt.data.trim();
 		var jsonData = null;
-		console.log("현재 대화명: " + presentName);
-		console.log("evt.data: " + evt.data);
 		
 		if(data.indexOf("nickname") > 0) {
 			jsonData = JSON.parse(data);
@@ -106,15 +104,6 @@
 		}else {
 			$("#roomChatMessageArea").append('<div style="text-align: center;">'+msg+'</div>');
 		}
-		/* 
-		if(msg.split(":")[0] == $('#hiddenuserid').val()){
-			$("#roomChatMessageArea").append('<div style="text-align: right; margin:20px;"><label class="bubble" style="margin-bottom: -10px;">'+msg.substr(msg.split(":")[0].length+1)+'</label></div>');
-		}else if(msg.indexOf(":") != -1){
-			$("#roomChatMessageArea").append('<div style="text-align: left; margin:20px;">'+msg.split(":")[0]+'<br><label class="bubble" style="margin-bottom: -10px;">'+msg.substr(msg.split(":")[0].length+1)+'</label></div>');
-		}else {
-			$("#roomChatMessageArea").append('<div style="text-align: center;">'+msg+'</div>');
-		}
-		 */
 		document.getElementById("chatArea").scrollTop = document.getElementById("chatArea").scrollHeight;
 	}
 	
