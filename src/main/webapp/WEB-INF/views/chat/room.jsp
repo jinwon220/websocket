@@ -56,7 +56,7 @@
 			$.each(data.split(","), function(i, elt) {
 				if(elt.indexOf("/") == -1){
 					if(elt == $('#hiddenuserid').val()){
-						$('#userListArea').append("<h3> 본인 : "+elt+"</h3>");
+						$('#userListArea').append('<h3> [나] '+elt+"</h3>");
 					}else{
 						$('#userListArea').append("<h3>"+elt+"</h3>");
 					}
@@ -163,7 +163,7 @@
 	<br />
 	<div class="container">
 		<div class="col-sm-2">
-			<select id="whisperUsers">
+			<select class="form-control" id="whisperUsers">
 			  <option value="whisper">전체 채팅</option>
 			</select>
 		</div>
