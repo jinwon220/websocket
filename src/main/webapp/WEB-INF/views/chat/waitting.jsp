@@ -43,12 +43,14 @@ function showrom(){
 		contentType: "application/json; charset=utf-8",
 		success : function(data){
 			$('#roomarea').empty();
+			var room = "room";
 			var htmltext = '<hr>';
-			$.each(data.data, function(index, elt) {
-				htmltext += '<form action="room'+elt.roomnumber+'.htm" method="post">'
+			$.each(data.data, function(index, elt) {/* action="room'+elt.roomnumber+'.htm" method="post" */
+				htmltext += '<form name="room'+elt.roomnumber+'" method="post">'
 						  + '<input type="hidden" name="roomnumber" value="'+elt.roomnumber+'" >'
 						  + '<label type="text" name="roomnumber">'+elt.roomname+'</label> '
-						  +	'<input class="btn btn-default" type="submit" value="입장"> </form><br>'
+						  /* +	'<input class="btn btn-default" type="submit" value="입장"> </form><br>' */
+						  + '<input class="btn btn-default" type="button" onclick="submitbtn('+room+elt.roomnumber+', '+elt.roomnumber+')" value="입장"></form><br>'
 			});
 			htmltext += '<hr>';
 			
@@ -56,6 +58,18 @@ function showrom(){
 		}
 	});
 }
+
+function submitbtn(name, num){
+	var f = name;
+	window.open('', 'WINDOW_NAME', 'toolbar=no, location=no, status=no,'
+	    + 'menubar=no, scrollbars=no, resizable=no, width=500, height=999');
+
+	f.action = 'room'+num+'.htm';
+	f.method = 'post';
+	f.target = 'WINDOW_NAME';
+	f.submit();
+}
+
 </script>
 </head>
 <body>

@@ -111,7 +111,8 @@
 		$('#roomSendBtn').click(function() { if($('#roomMessage').val() != "") send(); });
 
 		$('#outbtn').click(function() {
-			location.href="/kr/waitting.htm";
+			wsocket.close();
+			window.close();
 		});
 
 	});
