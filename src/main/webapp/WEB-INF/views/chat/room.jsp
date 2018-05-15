@@ -90,14 +90,31 @@
 	}
 	
 	function appendMessage(msg) {
-		if(msg.split(":")[0] == $('#hiddenuserid').val()){
-			$("#roomChatMessageArea").append('<div style="text-align: right; margin:20px;"><label class="bubble" style="margin-bottom: -10px;">'+msg.split(":")[1]+'</label></div>');
-		}else if(msg.indexOf(":") != -1){
-			$("#roomChatMessageArea").append('<div style="text-align: left; margin:20px;">'+msg.split(":")[0]+'<br><label class="bubble" style="margin-bottom: -10px;">'+msg.split(":")[1]+'</label></div>');
+		if(msg.indexOf(":") != -1){
+			var realmsg = '';
+			$.each(msg.substr(msg.split(":")[0].length+1).split(" "), function(i, elt) {
+				if(elt.substr(0, 4) == "http"){
+					elt = '<a href="'+elt+'">'+elt+'</a>';
+				}
+				realmsg += elt + " ";
+			});
+			if(msg.split(":")[0] == $('#hiddenuserid').val()){
+				$("#roomChatMessageArea").append('<div style="text-align: right; margin:20px;"><label class="bubble" style="margin-bottom: -10px;">'+realmsg+'</label></div>');
+			}else {
+				$("#roomChatMessageArea").append('<div style="text-align: left; margin:20px;">'+msg.split(":")[0]+'<br><label class="bubble" style="margin-bottom: -10px;">'+realmsg+'</label></div>');
+			}
 		}else {
 			$("#roomChatMessageArea").append('<div style="text-align: center;">'+msg+'</div>');
 		}
-		
+		/* 
+		if(msg.split(":")[0] == $('#hiddenuserid').val()){
+			$("#roomChatMessageArea").append('<div style="text-align: right; margin:20px;"><label class="bubble" style="margin-bottom: -10px;">'+msg.substr(msg.split(":")[0].length+1)+'</label></div>');
+		}else if(msg.indexOf(":") != -1){
+			$("#roomChatMessageArea").append('<div style="text-align: left; margin:20px;">'+msg.split(":")[0]+'<br><label class="bubble" style="margin-bottom: -10px;">'+msg.substr(msg.split(":")[0].length+1)+'</label></div>');
+		}else {
+			$("#roomChatMessageArea").append('<div style="text-align: center;">'+msg+'</div>');
+		}
+		 */
 		document.getElementById("chatArea").scrollTop = document.getElementById("chatArea").scrollHeight;
 	}
 	
