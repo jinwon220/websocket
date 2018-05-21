@@ -23,6 +23,7 @@
 	}
 	function onOpen(evt) {
 		appendMessage("연결되었습니다.");
+		alert("메롱");
 	}
 	function onMessage(evt) {
 		var presentName = $("#hiddenuserid").val()

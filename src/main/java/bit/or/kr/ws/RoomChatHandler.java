@@ -53,6 +53,7 @@ public class RoomChatHandler extends TextWebSocketHandler {
 	@Override
 	public void handleTransportError(
 			WebSocketSession session, Throwable exception) throws Exception {
+		//컴플릿트...
 	}
 	
 	//방에 입 퇴장시 유저리스트 뿌려주기 / 입퇴장 메세지
